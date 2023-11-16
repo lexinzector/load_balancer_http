@@ -1,0 +1,55 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<template>
+	<uid>info.bylex.load_balancer_http</uid>
+	<name>Cloud OS HTTP load balancer</name>
+	<version>0.4.3</version>
+	<maintainer>Alexey (LexInZector) Mikhalev &lt;lexin.ucoz.ru@gmail.com&gt;</maintainer>
+	<marketplace>https://cloud_os.bayrell.org/</marketplace>
+	<link name="Docker hub">https://hub.docker.com/r/lexinzector/load_balancer_http</link>
+	<link name="Github">https://github.com/lexinzector/load_balancer_http</link>
+	<xml name="github.com" priority="20">https://raw.githubusercontent.com/lexinzector/load_balancer_http/main/info.bylex.load_balancer_http.xml</xml>
+	<arch>amd64</arch>
+	<arch>arm64v8</arch>
+	<license>MIT</license>
+	<yaml>
+		<services>
+			<_var_app_name_>
+				<image>docker.io/lexinzector/load_balancer_http:0.4.3</image>
+				<hostname>{{.Service.Name}}.{{.Task.ID}}.local</hostname>
+				<volumes>_var_app_name__data:/data</volumes>
+				<ports>
+					<target>80</target>
+					<published>80</published>
+					<protocol>tcp</protocol>
+					<mode>host</mode>
+				</ports>
+				<ports>
+					<target>443</target>
+					<published>443</published>
+					<protocol>tcp</protocol>
+					<mode>host</mode>
+				</ports>
+			</_var_app_name_>
+		</services>
+		<volumes>
+			<_var_app_name__data />
+		</volumes>
+	</yaml>
+	<patch>
+		<operations>
+			<operation type="replace">
+				<path>/template/yaml/services/_var_app_name_/deploy/update_config/order</path>
+				<value>
+					<order>stop-first</order>
+				</value>
+			</operation>
+		</operations>
+	</patch>
+	<variables>
+		<variable>
+			<name>_var_app_name_</name>
+			<label>App name</label>
+			<type>string</type>
+		</variable>
+	</variables>
+</template>
